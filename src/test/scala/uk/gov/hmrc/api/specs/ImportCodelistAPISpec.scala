@@ -20,27 +20,27 @@ import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.api.client.HttpClient
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 
-class CountryCodelistAPISpec extends BaseSpec, HttpClient:
+class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
-  Feature("User can test the post CountryCodelist request") {
-    Scenario("To verify whether Post CountryCodelist request executes successfully") {
+  Feature("User can test the import CountryCodes codelist") {
+    Scenario("To verify whether Post CountryCodes codelist request executes successfully") {
       Given("The endpoint is accessed")
-      val url    = s"$testOnlyHost/codelists"
-      val result = await(
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
         post(
           url
         )
       )
-      result.status shouldBe 202
+      importCodelist_response.status shouldBe 202
       eventually {
-        val testOnlyUrl       = s"$host/lists/BC08"
-        val codelist_response = await(
+        val testOnlyUrl          = s"$host/lists/BC08"
+        val getCodelist_response = await(
           get(
             testOnlyUrl
           )
         )
-        codelist_response.status        shouldBe 200
-        codelist_response.body[JsValue] shouldBe Json.parse("""[{
+        getCodelist_response.status        shouldBe 200
+        getCodelist_response.body[JsValue] shouldBe Json.parse("""[{
             |   "key": "BL",
             |  "value": "Saint Barthélemy",
             |  "properties": {
@@ -72,45 +72,45 @@ class CountryCodelistAPISpec extends BaseSpec, HttpClient:
       }
     }
 
-    Scenario("To verify if Get CountryCodelist request returns 400 error with invalid CountryCodeList") {
+    Scenario("To verify if Get Codelists request returns 400 error with invalid CodeList") {
       Given("The endpoint is accessed")
-      val url    = s"$testOnlyHost/codelists"
-      val result = await(
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
         post(
           url
         )
       )
-      result.status shouldBe 202
+      importCodelist_response.status shouldBe 202
       eventually {
-        val testOnlyUrl       = s"$host/lists/BC88"
-        val codelist_response = await(
+        val testOnlyUrl          = s"$host/lists/BC88"
+        val getCodelist_response = await(
           get(
             testOnlyUrl
           )
         )
-        codelist_response.status shouldBe 400
-        codelist_response.body
+        getCodelist_response.status shouldBe 400
+        getCodelist_response.body
       }
     }
 
-    Scenario("To verify Delete CountryCodelist request is successful") {
+    Scenario("To verify Delete Codelist request is successful") {
       Given("The endpoint is accessed")
-      val url    = s"$testOnlyHost/codelists"
-      val result = await(
+      val url                     = s"$testOnlyHost/codelists"
+      val deleteCodelist_response = await(
         delete(
           url
         )
       )
-      result.status shouldBe 200
+      deleteCodelist_response.status shouldBe 200
       eventually {
-        val testOnlyUrl       = s"$host/lists/BC08"
-        val codelist_response = await(
+        val testOnlyUrl          = s"$host/lists/BC08"
+        val getCodelist_response = await(
           get(
             testOnlyUrl
           )
         )
-        codelist_response.status        shouldBe 200
-        codelist_response.body[JsValue] shouldBe Json.arr()
+        getCodelist_response.status        shouldBe 200
+        getCodelist_response.body[JsValue] shouldBe Json.arr()
       }
     }
   }
