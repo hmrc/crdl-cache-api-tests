@@ -15,10 +15,11 @@
  */
 
 package uk.gov.hmrc.api.specs
-
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Reads.*
+import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.api.client.HttpClient
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
+import java.time.Instant
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
@@ -111,6 +112,47 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
         )
         getCodelist_response.status        shouldBe 200
         getCodelist_response.body[JsValue] shouldBe Json.arr()
+      }
+    }
+
+    Scenario("To verify Delete lastUpdated is successful") {
+      Given("The endpoint is accessed")
+      val url                        = s"$testOnlyHost/last-updated"
+      val deleteLastUpdated_response = await(
+        delete(
+          url
+        )
+      )
+      deleteLastUpdated_response.status shouldBe 200
+    }
+
+    Scenario("Verify the lastUpdated dates and snapshot version of Codelist codes is as expected") {
+      Given("The endpoint is accessed")
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
+        post(
+          url
+        )
+      )
+      importCodelist_response.status shouldBe 202
+      eventually {
+        val testOnlyUrl          = s"$host/lists"
+        val getCodelist_response = await(
+          get(
+            testOnlyUrl
+          )
+        )
+        getCodelist_response.status shouldBe 200
+        val now               = Instant.now()
+        val Json_response     = getCodelist_response.body[JsValue].as[List[JsObject]]
+        val lastUpdated_Dates = Json_response.map(_ \ "lastUpdated").map(_.as[Instant])
+        every(lastUpdated_Dates) should (be >= now.minusSeconds(60))
+        Json_response.foreach(obj =>
+          if (obj("codeListCode").as[String] == "BC08") obj("snapshotVersion").as[Long] shouldBe 21
+        )
+        Json_response.foreach(obj =>
+          if (obj("codeListCode").as[String] == "BC66") obj("snapshotVersion").as[Long] shouldBe 9
+        )
       }
     }
   }
