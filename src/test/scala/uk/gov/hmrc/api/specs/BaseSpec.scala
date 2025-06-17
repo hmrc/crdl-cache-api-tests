@@ -21,6 +21,7 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Millis, Span}
+import play.shaded.ahc.org.asynchttpclient.Dsl.delete
 import uk.gov.hmrc.api.conf.TestEnvironment
 
 import scala.concurrent.duration.*
@@ -35,3 +36,7 @@ trait BaseSpec extends AnyFeatureSpec, GivenWhenThen, Matchers, Eventually:
 
   def await[T](f: Awaitable[T], timeout: Duration = 10.seconds): T =
     Await.result(f, timeout)
+
+  def deleteCodelist() = delete(s"$testOnlyHost/codelists")
+
+  def deleteLastUpdated() = delete(s"$testOnlyHost/last-updated")

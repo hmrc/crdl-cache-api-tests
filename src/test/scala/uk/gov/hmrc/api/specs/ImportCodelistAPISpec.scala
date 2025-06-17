@@ -155,4 +155,48 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
         )
       }
     }
+
+    Scenario("Verify fetching multiple codelist requests by Keys") {
+      Given("The endpoint is accessed")
+      deleteCodelist()
+      deleteLastUpdated()
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
+        post(
+          url
+        )
+      )
+      importCodelist_response.status shouldBe 202
+      eventually {
+        val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
+        val getCodelistByKeys_response = await(
+          get(
+            testOnlyUrl
+          )
+        )
+        getCodelistByKeys_response.status        shouldBe 200
+        getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
+            |   "key": "B",
+            |  "value": "Beer",
+            |  "properties": {
+            |    "actionIdentification": "1081"
+            |  }
+            | } ,
+            | {
+            |  "key": "S",
+            |  "value": "Ethyl alcohol and spirits",
+            |  "properties": {
+            |    "actionIdentification": "1087"
+            |  }
+            | },
+            | {
+            |  "key": "W",
+            |  "value": "Wine and fermented beverages other than wine and beer",
+            |  "properties": {
+            |    "actionIdentification": "1089"
+            |  }
+            | }
+    ]""".stripMargin)
+      }
+    }
   }
