@@ -26,6 +26,8 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
   Feature("User can test the import CountryCodes codelist") {
     Scenario("To verify whether Post CountryCodes codelist request executes successfully") {
       Given("The endpoint is accessed")
+      deleteCodelist()
+      deleteLastUpdated()
       val url                     = s"$testOnlyHost/codelists"
       val importCodelist_response = await(
         post(
@@ -153,6 +155,50 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
         Json_response.foreach(obj =>
           if (obj("codeListCode").as[String] == "BC66") obj("snapshotVersion").as[Long] shouldBe 9
         )
+      }
+    }
+
+    Scenario("Verify fetching multiple codelist requests by Keys") {
+      Given("The endpoint is accessed")
+      deleteCodelist()
+      deleteLastUpdated()
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
+        post(
+          url
+        )
+      )
+      importCodelist_response.status shouldBe 202
+      eventually {
+        val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
+        val getCodelistByKeys_response = await(
+          get(
+            testOnlyUrl
+          )
+        )
+        getCodelistByKeys_response.status        shouldBe 200
+        getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
+            |   "key": "B",
+            |  "value": "Beer",
+            |  "properties": {
+            |    "actionIdentification": "1084"
+            |  }
+            | } ,
+            | {
+            |  "key": "S",
+            |  "value": "Ethyl alcohol and spirits",
+            |  "properties": {
+            |    "actionIdentification": "1084"
+            |  }
+            | },
+            | {
+            |  "key": "W",
+            |  "value": "Wine and fermented beverages other than wine and beer",
+            |  "properties": {
+            |    "actionIdentification": "1086"
+            |  }
+            | }
+    ]""".stripMargin)
       }
     }
   }
