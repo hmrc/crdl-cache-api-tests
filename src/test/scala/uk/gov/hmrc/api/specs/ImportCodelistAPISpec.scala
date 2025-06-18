@@ -26,6 +26,8 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
   Feature("User can test the import CountryCodes codelist") {
     Scenario("To verify whether Post CountryCodes codelist request executes successfully") {
       Given("The endpoint is accessed")
+      deleteCodelist()
+      deleteLastUpdated()
       val url                     = s"$testOnlyHost/codelists"
       val importCodelist_response = await(
         post(
@@ -179,21 +181,21 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |   "key": "B",
             |  "value": "Beer",
             |  "properties": {
-            |    "actionIdentification": "1081"
+            |    "actionIdentification": "1084"
             |  }
             | } ,
             | {
             |  "key": "S",
             |  "value": "Ethyl alcohol and spirits",
             |  "properties": {
-            |    "actionIdentification": "1087"
+            |    "actionIdentification": "1084"
             |  }
             | },
             | {
             |  "key": "W",
             |  "value": "Wine and fermented beverages other than wine and beer",
             |  "properties": {
-            |    "actionIdentification": "1089"
+            |    "actionIdentification": "1086"
             |  }
             | }
     ]""".stripMargin)
