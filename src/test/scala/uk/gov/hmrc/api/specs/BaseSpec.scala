@@ -37,6 +37,5 @@ trait BaseSpec extends AnyFeatureSpec, GivenWhenThen, Matchers, Eventually:
   def await[T](f: Awaitable[T], timeout: Duration = 10.seconds): T =
     Await.result(f, timeout)
 
-  def deleteCodelist() = delete(s"$testOnlyHost/codelists")
-
+  def deleteCodelist()    = delete(s"$testOnlyHost/codelists")
   def deleteLastUpdated() = delete(s"$testOnlyHost/last-updated")

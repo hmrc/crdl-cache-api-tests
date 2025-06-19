@@ -155,6 +155,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
         Json_response.foreach(obj =>
           if (obj("codeListCode").as[String] == "BC66") obj("snapshotVersion").as[Long] shouldBe 9
         )
+        Json_response.foreach(obj =>
+          if (obj("codeListCode").as[String] == "BC36") obj("snapshotVersion").as[Long] shouldBe 9
+        )
       }
     }
 
@@ -181,7 +184,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |   "key": "B",
             |  "value": "Beer",
             |  "properties": {
-            |    "actionIdentification": "1084"
+            |    "actionIdentification": "1081"
             |  }
             | } ,
             | {
@@ -196,6 +199,76 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |  "value": "Wine and fermented beverages other than wine and beer",
             |  "properties": {
             |    "actionIdentification": "1086"
+            |  }
+            | }
+    ]""".stripMargin)
+      }
+    }
+
+    Scenario("Verify fetching codelists by properties") {
+      Given("The endpoint is accessed")
+      val url                     = s"$testOnlyHost/codelists"
+      val importCodelist_response = await(
+        post(
+          url
+        )
+      )
+      importCodelist_response.status shouldBe 202
+      eventually {
+        val testOnlyUrl                =
+          s"$host/lists/BC36?exciseProductsCategoryCode=E&densityApplicabilityFlag=false&alcoholicStrengthApplicabilityFlag=false"
+        val getCodelistByKeys_response = await(
+          get(
+            testOnlyUrl
+          )
+        )
+        getCodelistByKeys_response.status        shouldBe 200
+        getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
+            |  "key": "E470",
+            |  "value": "Heavy fuel oil falling within CN codes 2710 19 62, 2710 19 66, 2710 19 67, 2710 20 32 and 2710 20 38 (Article 20(1)(c) of Directive 2003/96/EC)",
+            |  "properties": {
+            |    "unitOfMeasureCode": "1",
+            |    "degreePlatoApplicabilityFlag": false,
+            |    "actionIdentification": "1096",
+            |    "exciseProductsCategoryCode": "E",
+            |    "alcoholicStrengthApplicabilityFlag": false,
+            |    "densityApplicabilityFlag": false
+            |  }
+            | } ,
+            | {
+            |  "key": "E500",
+            |  "value": "Liquified Petroleum gases (LPG) Products falling within CN codes 2711 (except 2711 11, 2711 21 and 2711 29)",
+            |  "properties": {
+            |    "unitOfMeasureCode": "1",
+            |    "degreePlatoApplicabilityFlag": false,
+            |    "actionIdentification": "1099",
+            |    "exciseProductsCategoryCode": "E",
+            |    "alcoholicStrengthApplicabilityFlag": false,
+            |    "densityApplicabilityFlag": false
+            |  }
+            | },
+            |{
+            |  "key": "E600",
+            |  "value": "Saturated acyclic hydrocarbons Products falling within CN code 2901 10",
+            |  "properties": {
+            |    "unitOfMeasureCode": "1",
+            |    "degreePlatoApplicabilityFlag": false,
+            |    "actionIdentification": "1103",
+            |    "exciseProductsCategoryCode": "E",
+            |    "alcoholicStrengthApplicabilityFlag": false,
+            |    "densityApplicabilityFlag": false
+            |    }
+            | },
+            | {
+            |  "key": "E930",
+            |   "value": "Additives falling within CN codes 3811 11, 3811 19 00 and 3811 90 00",
+            |  "properties": {
+            |   "unitOfMeasureCode": "2",
+            |   "degreePlatoApplicabilityFlag": false,
+            |   "actionIdentification": "1108",
+            |   "exciseProductsCategoryCode": "E",
+            |   "alcoholicStrengthApplicabilityFlag": false,
+            |   "densityApplicabilityFlag": false
             |  }
             | }
     ]""".stripMargin)
