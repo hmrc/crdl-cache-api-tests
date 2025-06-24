@@ -26,14 +26,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
   Feature("User can test the import CountryCodes codelist") {
     Scenario("To verify whether Post CountryCodes codelist request executes successfully") {
       Given("The endpoint is accessed")
-      deleteCodelist()
-      deleteLastUpdated()
-      val url                     = s"$testOnlyHost/codelists"
-      val importCodelist_response = await(
-        post(
-          url
-        )
-      )
+      await(deleteCodelist())
+      await(deleteLastUpdated())
+      val importCodelist_response = await(importCodelists())
       importCodelist_response.status shouldBe 202
       eventually {
         val testOnlyUrl          = s"$host/lists/BC08"
@@ -77,12 +72,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
     Scenario("To verify if Get Codelists request returns 400 error with invalid CodeList") {
       Given("The endpoint is accessed")
-      val url                     = s"$testOnlyHost/codelists"
-      val importCodelist_response = await(
-        post(
-          url
-        )
-      )
+      val importCodelist_response = await(importCodelists())
       importCodelist_response.status shouldBe 202
       eventually {
         val testOnlyUrl          = s"$host/lists/BC88"
@@ -98,12 +88,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
     Scenario("To verify Delete Codelist request is successful") {
       Given("The endpoint is accessed")
-      val url                     = s"$testOnlyHost/codelists"
-      val deleteCodelist_response = await(
-        delete(
-          url
-        )
-      )
+      val deleteCodelist_response = await(deleteCodelist())
       deleteCodelist_response.status shouldBe 200
       eventually {
         val testOnlyUrl          = s"$host/lists/BC08"
@@ -119,23 +104,15 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
     Scenario("To verify Delete lastUpdated is successful") {
       Given("The endpoint is accessed")
-      val url                        = s"$testOnlyHost/last-updated"
-      val deleteLastUpdated_response = await(
-        delete(
-          url
-        )
-      )
+      val deleteLastUpdated_response = await(deleteLastUpdated())
       deleteLastUpdated_response.status shouldBe 200
     }
 
     Scenario("Verify the lastUpdated dates and snapshot version of Codelist codes is as expected") {
       Given("The endpoint is accessed")
-      val url                     = s"$testOnlyHost/codelists"
-      val importCodelist_response = await(
-        post(
-          url
-        )
-      )
+      await(deleteCodelist())
+      await(deleteLastUpdated())
+      val importCodelist_response = await(importCodelists())
       importCodelist_response.status shouldBe 202
       eventually {
         val testOnlyUrl          = s"$host/lists"
@@ -163,14 +140,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
     Scenario("Verify fetching multiple codelist requests by Keys") {
       Given("The endpoint is accessed")
-      deleteCodelist()
-      deleteLastUpdated()
-      val url                     = s"$testOnlyHost/codelists"
-      val importCodelist_response = await(
-        post(
-          url
-        )
-      )
+      await(deleteCodelist())
+      await(deleteLastUpdated())
+      val importCodelist_response = await(importCodelists())
       importCodelist_response.status shouldBe 202
       eventually {
         val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
@@ -184,21 +156,21 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |   "key": "B",
             |  "value": "Beer",
             |  "properties": {
-            |    "actionIdentification": "1081"
+            |    "actionIdentification": "1084"
             |  }
             | } ,
             | {
             |  "key": "S",
             |  "value": "Ethyl alcohol and spirits",
             |  "properties": {
-            |    "actionIdentification": "1084"
+            |    "actionIdentification": "1087"
             |  }
             | },
             | {
             |  "key": "W",
             |  "value": "Wine and fermented beverages other than wine and beer",
             |  "properties": {
-            |    "actionIdentification": "1086"
+            |    "actionIdentification": "1089"
             |  }
             | }
     ]""".stripMargin)
@@ -207,12 +179,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
 
     Scenario("Verify fetching codelists by properties") {
       Given("The endpoint is accessed")
-      val url                     = s"$testOnlyHost/codelists"
-      val importCodelist_response = await(
-        post(
-          url
-        )
-      )
+      await(deleteCodelist())
+      await(deleteLastUpdated())
+      val importCodelist_response = await(importCodelists())
       importCodelist_response.status shouldBe 202
       eventually {
         val testOnlyUrl                =
@@ -229,7 +198,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |  "properties": {
             |    "unitOfMeasureCode": "1",
             |    "degreePlatoApplicabilityFlag": false,
-            |    "actionIdentification": "1096",
+            |    "actionIdentification": "1099",
             |    "exciseProductsCategoryCode": "E",
             |    "alcoholicStrengthApplicabilityFlag": false,
             |    "densityApplicabilityFlag": false
@@ -241,7 +210,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |  "properties": {
             |    "unitOfMeasureCode": "1",
             |    "degreePlatoApplicabilityFlag": false,
-            |    "actionIdentification": "1099",
+            |    "actionIdentification": "1102",
             |    "exciseProductsCategoryCode": "E",
             |    "alcoholicStrengthApplicabilityFlag": false,
             |    "densityApplicabilityFlag": false
