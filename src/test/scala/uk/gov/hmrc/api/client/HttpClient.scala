@@ -18,11 +18,13 @@ package uk.gov.hmrc.api.client
 
 import play.api.libs.ws.DefaultBodyWritables.*
 import play.api.libs.ws.{EmptyBody, StandaloneWSResponse}
+import uk.gov.hmrc.api.specs.BaseSpec
 import uk.gov.hmrc.apitestrunner.http.HttpClient as TestRunnerHttpClient
 
 import scala.concurrent.Future
 
 trait HttpClient extends TestRunnerHttpClient:
+  this: BaseSpec =>
 
   def get(url: String, headers: (String, String)*): Future[StandaloneWSResponse] =
     mkRequest(url)
@@ -43,3 +45,9 @@ trait HttpClient extends TestRunnerHttpClient:
     mkRequest(url)
       .withHttpHeaders(headers*)
       .delete()
+
+  def deleteCodelist(): Future[StandaloneWSResponse] = delete(s"$testOnlyHost/codelists")
+
+  def deleteLastUpdated(): Future[StandaloneWSResponse] = delete(s"$testOnlyHost/last-updated")
+
+  def importCodelists(): Future[StandaloneWSResponse] = post(s"$testOnlyHost/codelists")
