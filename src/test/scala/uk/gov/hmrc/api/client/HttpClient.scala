@@ -46,8 +46,14 @@ trait HttpClient extends TestRunnerHttpClient:
       .withHttpHeaders(headers*)
       .delete()
 
-  def deleteCodelist(): Future[StandaloneWSResponse] = delete(s"$testOnlyHost/codelists")
+  def deleteCodelist(): StandaloneWSResponse = await(delete(s"$testOnlyHost/codelists"))
 
-  def deleteLastUpdated(): Future[StandaloneWSResponse] = delete(s"$testOnlyHost/last-updated")
+  def deleteLastUpdated(): StandaloneWSResponse = await(delete(s"$testOnlyHost/last-updated"))
 
-  def importCodelists(): Future[StandaloneWSResponse] = post(s"$testOnlyHost/codelists")
+  def importCodelists(): StandaloneWSResponse = await(post(s"$testOnlyHost/codelists"))
+
+  def getCodelistImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/codelists"))
+
+  def getCodelist(code: String): StandaloneWSResponse = await(get(s"$host/lists/$code"))
+
+  def getCodelistVersions(): StandaloneWSResponse = await(get(s"$host/lists"))
