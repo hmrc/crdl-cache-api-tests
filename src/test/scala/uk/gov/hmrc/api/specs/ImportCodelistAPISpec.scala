@@ -15,30 +15,33 @@
  */
 
 package uk.gov.hmrc.api.specs
+import org.scalatest.BeforeAndAfterAll
 import play.api.libs.json.Reads.*
 import play.api.libs.json.{JsObject, JsValue, Json}
-import uk.gov.hmrc.api.client.HttpClient
+import play.api.libs.ws.DefaultBodyReadables.*
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
+import uk.gov.hmrc.api.client.HttpClient
+
 import java.time.Instant
 
-class ImportCodelistAPISpec extends BaseSpec, HttpClient:
+class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
+  override def beforeAll(): Unit = {
+    deleteCodelist()
+    deleteLastUpdated()
+    importCodelists().status shouldBe 202
+    eventually {
+      // Wait for the import job to finish
+      val codelistResponse = getCodelistImportStatus().body[JsValue]
+      codelistResponse shouldBe Json.obj("status" -> "IDLE")
+    }
+  }
 
   Feature("User can test the import CountryCodes codelist") {
-    Scenario("To verify whether Post CountryCodes codelist request executes successfully") {
+    Scenario("To verify whether Get CountryCodes codelist request executes successfully") {
       Given("The endpoint is accessed")
-      await(deleteCodelist())
-      await(deleteLastUpdated())
-      val importCodelist_response = await(importCodelists())
-      importCodelist_response.status shouldBe 202
-      eventually {
-        val testOnlyUrl          = s"$host/lists/BC08"
-        val getCodelist_response = await(
-          get(
-            testOnlyUrl
-          )
-        )
-        getCodelist_response.status        shouldBe 200
-        getCodelist_response.body[JsValue] shouldBe Json.parse("""[{
+      val getCodelist_response = getCodelist("BC08")
+      getCodelist_response.status        shouldBe 200
+      getCodelist_response.body[JsValue] shouldBe Json.parse("""[{
             |   "key": "BL",
             |  "value": "Saint Barthélemy",
             |  "properties": {
@@ -67,92 +70,43 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |  }
             |  }
 ]""".stripMargin)
-      }
     }
 
     Scenario("To verify if Get Codelists request returns 400 error with invalid CodeList") {
       Given("The endpoint is accessed")
-      val importCodelist_response = await(importCodelists())
-      importCodelist_response.status shouldBe 202
-      eventually {
-        val testOnlyUrl          = s"$host/lists/BC88"
-        val getCodelist_response = await(
-          get(
-            testOnlyUrl
-          )
-        )
-        getCodelist_response.status shouldBe 400
-        getCodelist_response.body
-      }
-    }
-
-    Scenario("To verify Delete Codelist request is successful") {
-      Given("The endpoint is accessed")
-      val deleteCodelist_response = await(deleteCodelist())
-      deleteCodelist_response.status shouldBe 200
-      eventually {
-        val testOnlyUrl          = s"$host/lists/BC08"
-        val getCodelist_response = await(
-          get(
-            testOnlyUrl
-          )
-        )
-        getCodelist_response.status        shouldBe 200
-        getCodelist_response.body[JsValue] shouldBe Json.arr()
-      }
-    }
-
-    Scenario("To verify Delete lastUpdated is successful") {
-      Given("The endpoint is accessed")
-      val deleteLastUpdated_response = await(deleteLastUpdated())
-      deleteLastUpdated_response.status shouldBe 200
+      val getCodelist_response = getCodelist("BC88")
+      getCodelist_response.status shouldBe 400
+      getCodelist_response.body
     }
 
     Scenario("Verify the lastUpdated dates and snapshot version of Codelist codes is as expected") {
       Given("The endpoint is accessed")
-      await(deleteCodelist())
-      await(deleteLastUpdated())
-      val importCodelist_response = await(importCodelists())
-      importCodelist_response.status shouldBe 202
-      eventually {
-        val testOnlyUrl          = s"$host/lists"
-        val getCodelist_response = await(
-          get(
-            testOnlyUrl
-          )
-        )
-        getCodelist_response.status shouldBe 200
-        val now               = Instant.now()
-        val Json_response     = getCodelist_response.body[JsValue].as[List[JsObject]]
-        val lastUpdated_Dates = Json_response.map(_ \ "lastUpdated").map(_.as[Instant])
-        every(lastUpdated_Dates) should (be >= now.minusSeconds(60))
-        Json_response.foreach(obj =>
-          if (obj("codeListCode").as[String] == "BC08") obj("snapshotVersion").as[Long] shouldBe 21
-        )
-        Json_response.foreach(obj =>
-          if (obj("codeListCode").as[String] == "BC66") obj("snapshotVersion").as[Long] shouldBe 9
-        )
-        Json_response.foreach(obj =>
-          if (obj("codeListCode").as[String] == "BC36") obj("snapshotVersion").as[Long] shouldBe 9
-        )
+      val getCodelistVersions_response = getCodelistVersions()
+      getCodelistVersions_response.status shouldBe 200
+      val now               = Instant.now()
+      val Json_response     = getCodelistVersions_response.body[JsValue].as[List[JsObject]]
+      val lastUpdated_Dates = Json_response.map(_ \ "lastUpdated").map(_.as[Instant])
+      every(lastUpdated_Dates) should (be >= now.minusSeconds(60))
+      Json_response.foreach { obj =>
+        if (obj("codeListCode").as[String] == "BC08")
+          obj("snapshotVersion").as[Long] shouldBe 12
+        else if (obj("codeListCode").as[String] == "BC66")
+          obj("snapshotVersion").as[Long] shouldBe 9
+        else if (obj("codeListCode").as[String] == "BC36")
+          obj("snapshotVersion").as[Long] shouldBe 9
       }
     }
 
     Scenario("Verify fetching multiple codelist requests by Keys") {
       Given("The endpoint is accessed")
-      await(deleteCodelist())
-      await(deleteLastUpdated())
-      val importCodelist_response = await(importCodelists())
-      importCodelist_response.status shouldBe 202
-      eventually {
-        val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
-        val getCodelistByKeys_response = await(
-          get(
-            testOnlyUrl
-          )
+      val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl
         )
-        getCodelistByKeys_response.status        shouldBe 200
-        getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
+      )
+      getCodelistByKeys_response.status        shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
             |   "key": "B",
             |  "value": "Beer",
             |  "properties": {
@@ -172,27 +126,21 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |  "properties": {
             |    "actionIdentification": "1089"
             |  }
-            | }
-    ]""".stripMargin)
-      }
+            |}
+            ]""".stripMargin)
     }
 
     Scenario("Verify fetching codelists by properties") {
       Given("The endpoint is accessed")
-      await(deleteCodelist())
-      await(deleteLastUpdated())
-      val importCodelist_response = await(importCodelists())
-      importCodelist_response.status shouldBe 202
-      eventually {
-        val testOnlyUrl                =
-          s"$host/lists/BC36?exciseProductsCategoryCode=E&densityApplicabilityFlag=false&alcoholicStrengthApplicabilityFlag=false"
-        val getCodelistByKeys_response = await(
-          get(
-            testOnlyUrl
-          )
+      val testOnlyUrl                =
+        s"$host/lists/BC36?exciseProductsCategoryCode=E&densityApplicabilityFlag=false&alcoholicStrengthApplicabilityFlag=false"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl
         )
-        getCodelistByKeys_response.status        shouldBe 200
-        getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
+      )
+      getCodelistByKeys_response.status        shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
             |  "key": "E470",
             |  "value": "Heavy fuel oil falling within CN codes 2710 19 62, 2710 19 66, 2710 19 67, 2710 20 32 and 2710 20 38 (Article 20(1)(c) of Directive 2003/96/EC)",
             |  "properties": {
@@ -240,7 +188,24 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient:
             |   "densityApplicabilityFlag": false
             |  }
             | }
-    ]""".stripMargin)
-      }
+            ]""".stripMargin)
+    }
+
+    Scenario("To verify Delete Codelist request is successful") {
+      Given("The endpoint is accessed")
+      val deleteCodelist_response = deleteCodelist()
+      deleteCodelist_response.status shouldBe 200
+      val getCodelist_response = getCodelist("BC08")
+      getCodelist_response.status        shouldBe 200
+      getCodelist_response.body[JsValue] shouldBe Json.arr()
+    }
+
+    Scenario("To verify Delete lastUpdated is successful") {
+      Given("The endpoint is accessed")
+      val deleteLastUpdated_response = deleteLastUpdated()
+      deleteLastUpdated_response.status shouldBe 200
+      val getCodelistVersions_response = getCodelistVersions()
+      getCodelistVersions_response.status        shouldBe 200
+      getCodelistVersions_response.body[JsValue] shouldBe Json.arr()
     }
   }
