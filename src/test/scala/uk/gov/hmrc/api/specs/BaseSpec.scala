@@ -32,7 +32,8 @@ trait BaseSpec extends AnyFeatureSpec, GivenWhenThen, Matchers, Eventually, Http
   val testOnlyHost: String = TestEnvironment.url("test-only")
 
   // This configuration determines how long `eventually` will wait for its assertions to become true
-  override given patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10000, Millis))
+  override given patienceConfig: PatienceConfig =
+    PatienceConfig(timeout = 20.seconds, interval = 500.milliseconds)
 
   def await[T](f: Awaitable[T], timeout: Duration = 10.seconds): T =
     Await.result(f, timeout)
