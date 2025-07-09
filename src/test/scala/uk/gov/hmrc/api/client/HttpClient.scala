@@ -57,3 +57,9 @@ trait HttpClient extends TestRunnerHttpClient:
   def getCodelist(code: String): StandaloneWSResponse = await(get(s"$host/lists/$code"))
 
   def getCodelistVersions(): StandaloneWSResponse = await(get(s"$host/lists"))
+
+  def deleteCorrespondenceList(): StandaloneWSResponse = await(delete(s"$testOnlyHost/correspondence-lists"))
+
+  def importCorrespondenceList(): StandaloneWSResponse = await(post(s"$testOnlyHost/correspondence-lists"))
+
+  def getCorrespondencelistImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/correspondence-lists"))
