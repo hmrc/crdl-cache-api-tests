@@ -28,6 +28,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
     deleteCodelist()
     deleteLastUpdated()
+    deleteCorrespondenceList()
     importCodelists().status shouldBe 202
     eventually {
       // Wait for the import job to finish
@@ -94,6 +95,12 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           obj("snapshotVersion").as[Long] shouldBe 9
         else if (obj("codeListCode").as[String] == "BC36")
           obj("snapshotVersion").as[Long] shouldBe 9
+        else if (obj("codeListCode").as[String] == "BC22")
+          obj("snapshotVersion").as[Long] shouldBe 6
+        else if (obj("codeListCode").as[String] == "BC01")
+          obj("snapshotVersion").as[Long] shouldBe 9
+        else if (obj("codeListCode").as[String] == "BC12")
+          obj("snapshotVersion").as[Long] shouldBe 33
       }
     }
 
