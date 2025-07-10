@@ -46,28 +46,16 @@ trait HttpClient extends TestRunnerHttpClient:
       .withHttpHeaders(headers*)
       .delete()
 
-  def deleteCodelist(): StandaloneWSResponse = await(delete(s"$testOnlyHost/codelists"))
+  def deleteList(list: String): StandaloneWSResponse = await(delete(s"$testOnlyHost/$list"))
 
   def deleteLastUpdated(): StandaloneWSResponse = await(delete(s"$testOnlyHost/last-updated"))
 
-  def importCodelists(): StandaloneWSResponse = await(post(s"$testOnlyHost/codelists"))
+  def importLists(list: String): StandaloneWSResponse = await(post(s"$testOnlyHost/$list"))
 
-  def getCodelistImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/codelists"))
+  def getImportStatus(list: String): StandaloneWSResponse = await(get(s"$testOnlyHost/$list"))
 
   def getCodelist(code: String): StandaloneWSResponse = await(get(s"$host/lists/$code"))
 
   def getCodelistVersions(): StandaloneWSResponse = await(get(s"$host/lists"))
-
-  def deleteCorrespondenceList(): StandaloneWSResponse = await(delete(s"$testOnlyHost/correspondence-lists"))
-
-  def importCorrespondenceList(): StandaloneWSResponse = await(post(s"$testOnlyHost/correspondence-lists"))
-
-  def getCorrespondencelistImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/correspondence-lists"))
-
-  def deleteCustomsOfficeList(): StandaloneWSResponse = await(delete(s"$testOnlyHost/customs-office-lists"))
-
-  def importCustomsOfficeList(): StandaloneWSResponse = await(post(s"$testOnlyHost/customs-office-lists"))
-
-  def getCustomsOfficeListImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/customs-office-lists"))
 
   def getCustomsOfficeList(): StandaloneWSResponse = await(get(s"$host/offices"))

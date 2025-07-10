@@ -26,16 +26,16 @@ import java.time.Instant
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
-    deleteCodelist()
+    deleteList("codelists")
     deleteLastUpdated()
-    deleteCorrespondenceList()
-    importCodelists().status          shouldBe 202
-    importCorrespondenceList().status shouldBe 202
+    deleteList("correspondence-lists")
+    importLists("codelists").status shouldBe 202
+    importLists("correspondence-lists").status shouldBe 202
     eventually {
       // Wait for the import job to finish
-      val codelistResponse = getCodelistImportStatus().body[JsValue]
+      val codelistResponse = getImportStatus("codelists").body[JsValue]
       codelistResponse shouldBe Json.obj("status" -> "IDLE")
-      val correspondenceListResponse = getCorrespondencelistImportStatus().body[JsValue]
+      val correspondenceListResponse = getImportStatus("correspondence-lists").body[JsValue]
       correspondenceListResponse shouldBe Json.obj("status" -> "IDLE")
     }
   }
@@ -207,7 +207,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
 
     Scenario("To verify Delete Codelist request is successful") {
       Given("The endpoint is accessed")
-      val deleteCodelist_response = deleteCodelist()
+      val deleteCodelist_response = deleteList("codelists")
       deleteCodelist_response.status shouldBe 200
       val getCodelist_response = getCodelist("BC08")
       getCodelist_response.status        shouldBe 200

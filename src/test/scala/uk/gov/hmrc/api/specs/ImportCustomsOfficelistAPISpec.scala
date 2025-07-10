@@ -27,14 +27,14 @@ import java.time.Instant
 
 class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
-    deleteCodelist()
+    deleteList("codelists")
     deleteLastUpdated()
 //    deleteCorrespondenceList()
-    deleteCustomsOfficeList()
-    importCustomsOfficeList().status shouldBe 202
+    deleteList("customs-office-lists")
+    importLists("customs-office-lists").status shouldBe 202
     eventually {
       // Wait for the import job to finish
-      val customsOfficeListImportResponse = getCustomsOfficeListImportStatus().body[JsValue]
+      val customsOfficeListImportResponse = getImportStatus("customs-office-lists").body[JsValue]
       customsOfficeListImportResponse shouldBe Json.obj("status" -> "IDLE")
     }
   }
@@ -464,4 +464,3 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
            ]""".stripMargin)
     }
   }
-
