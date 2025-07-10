@@ -63,3 +63,11 @@ trait HttpClient extends TestRunnerHttpClient:
   def importCorrespondenceList(): StandaloneWSResponse = await(post(s"$testOnlyHost/correspondence-lists"))
 
   def getCorrespondencelistImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/correspondence-lists"))
+
+  def deleteCustomsOfficeList(): StandaloneWSResponse = await(delete(s"$testOnlyHost/customs-office-lists"))
+
+  def importCustomsOfficeList(): StandaloneWSResponse = await(post(s"$testOnlyHost/customs-office-lists"))
+
+  def getCustomsOfficeListImportStatus(): StandaloneWSResponse = await(get(s"$testOnlyHost/customs-office-lists"))
+
+  def getCustomsOfficeList(): StandaloneWSResponse = await(get(s"$host/offices"))
