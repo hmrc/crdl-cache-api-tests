@@ -27,7 +27,7 @@ import java.time.Instant
 
 class ImportCorrespondencelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
-    deleteCodelist()
+//    deleteCodelist()
     deleteLastUpdated()
     deleteCorrespondenceList()
     importCorrespondenceList().status shouldBe 202

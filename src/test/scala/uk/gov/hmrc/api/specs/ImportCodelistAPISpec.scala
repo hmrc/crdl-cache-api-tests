@@ -28,7 +28,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
     deleteCodelist()
     deleteLastUpdated()
-    deleteCorrespondenceList()
+//    deleteCorrespondenceList()
     importCodelists().status shouldBe 202
     eventually {
       // Wait for the import job to finish
