@@ -28,7 +28,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
     deleteCodelist()
     deleteLastUpdated()
-//    deleteCorrespondenceList()
+    deleteCorrespondenceList()
     importCodelists().status shouldBe 202
     eventually {
       // Wait for the import job to finish
@@ -216,3 +216,48 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       getCodelistVersions_response.body[JsValue] shouldBe Json.arr()
     }
   }
+
+  Scenario("To verify whether Get Correspondence list executes successfully") {
+    Given("The endpoint is accessed")
+    val getCodelist_response = getCodelist("E200")
+    getCodelist_response.status shouldBe 200
+    getCodelist_response.body[JsValue].as[List[JsValue]].take(4) shouldBe List(
+      Json.parse(
+        """{
+          |   "key": "15071010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "408"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse(
+        """ {
+          |  "key": "15079010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "409"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse(
+        """ {
+          |  "key": "15081010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "410"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse(
+        """{
+          |  "key": "15089010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "411"
+          |  }
+          |  }
+          |""".stripMargin)
+    )
+  }
+}
