@@ -20,7 +20,7 @@ import org.scalatest.GivenWhenThen
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.time.{Millis, Span}
+import org.scalatest.time.Span
 import uk.gov.hmrc.api.client.HttpClient
 import uk.gov.hmrc.api.conf.TestEnvironment
 

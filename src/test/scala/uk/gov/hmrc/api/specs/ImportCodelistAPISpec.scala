@@ -29,11 +29,14 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
     deleteCodelist()
     deleteLastUpdated()
     deleteCorrespondenceList()
-    importCodelists().status shouldBe 202
+    importCodelists().status          shouldBe 202
+    importCorrespondenceList().status shouldBe 202
     eventually {
       // Wait for the import job to finish
       val codelistResponse = getCodelistImportStatus().body[JsValue]
       codelistResponse shouldBe Json.obj("status" -> "IDLE")
+      val correspondenceListResponse = getCorrespondencelistImportStatus().body[JsValue]
+      correspondenceListResponse shouldBe Json.obj("status" -> "IDLE")
     }
   }
 
@@ -86,7 +89,11 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       getCodelistVersions_response.status shouldBe 200
       val now               = Instant.now()
       val Json_response     = getCodelistVersions_response.body[JsValue].as[List[JsObject]]
-      val lastUpdated_Dates = Json_response.map(_ \ "lastUpdated").map(_.as[Instant])
+      val lastUpdated_Dates = Json_response
+        // E200 currently uses static data with a fixed import timestamp
+        .filterNot(_("codeListCode").as[String] == "E200")
+        .map(_ \ "lastUpdated")
+        .map(_.as[Instant])
       every(lastUpdated_Dates) should (be >= now.minusSeconds(60))
       Json_response.foreach { obj =>
         if (obj("codeListCode").as[String] == "BC08")
@@ -215,4 +222,44 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       getCodelistVersions_response.status        shouldBe 200
       getCodelistVersions_response.body[JsValue] shouldBe Json.arr()
     }
+  }
+
+  Scenario("To verify whether Get Correspondence list executes successfully") {
+    Given("The endpoint is accessed")
+    val getCodelist_response = getCodelist("E200")
+    getCodelist_response.status                                  shouldBe 200
+    getCodelist_response.body[JsValue].as[List[JsValue]].take(4) shouldBe List(
+      Json.parse("""{
+          |   "key": "15071010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "408"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse(""" {
+          |  "key": "15079010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "409"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse(""" {
+          |  "key": "15081010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "410"
+          |  }
+          | }
+          |""".stripMargin),
+      Json.parse("""{
+          |  "key": "15089010",
+          |  "value": "E200",
+          |  "properties": {
+          |    "actionIdentification": "411"
+          |  }
+          |  }
+          |""".stripMargin)
+    )
   }
