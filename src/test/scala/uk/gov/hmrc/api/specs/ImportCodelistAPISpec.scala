@@ -29,7 +29,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
     deleteList("codelists")
     deleteLastUpdated()
     deleteList("correspondence-lists")
-    importLists("codelists").status shouldBe 202
+    importLists("codelists").status            shouldBe 202
     importLists("correspondence-lists").status shouldBe 202
     eventually {
       // Wait for the import job to finish

@@ -17,19 +17,12 @@
 package uk.gov.hmrc.api.specs
 
 import org.scalatest.BeforeAndAfterAll
-import play.api.libs.json.Reads.*
 import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.DefaultBodyReadables.*
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import uk.gov.hmrc.api.client.HttpClient
 
-import java.time.Instant
-
 class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
-    deleteList("codelists")
-    deleteLastUpdated()
-//    deleteCorrespondenceList()
     deleteList("customs-office-lists")
     importLists("customs-office-lists").status shouldBe 202
     eventually {
