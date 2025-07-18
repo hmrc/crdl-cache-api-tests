@@ -687,4 +687,128 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |  }
        ]""".stripMargin)
     }
+
+    Scenario("To verify whether user is able to filter CustomsOffice list by referenceNumbers") {
+      Given("The endpoint is accessed")
+      val testOnlyUrl                          = s"$host/offices?referenceNumbers=DK003102"
+      val getCustomsofficelistByRoles_response = await(
+        get(
+          testOnlyUrl
+        )
+      )
+      getCustomsofficelistByRoles_response.status        shouldBe 200
+      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
+          |    "referenceNumber": "DK003102",
+          |    "referenceNumberMainOffice": null,
+          |    "referenceNumberHigherAuthority": null,
+          |    "referenceNumberCompetentAuthorityOfEnquiry": "DK003102",
+          |    "referenceNumberCompetentAuthorityOfRecovery": "DK003102",
+          |    "referenceNumberTakeover": null,
+          |    "countryCode": "DK",
+          |    "emailAddress": "test@dk",
+          |    "unLocodeId": null,
+          |    "nctsEntryDate": null,
+          |    "nearestOffice": null,
+          |    "postalCode": "9850",
+          |    "phoneNumber": "+45 342234 34543",
+          |    "faxNumber": null,
+          |    "telexNumber": null,
+          |    "geoInfoCode": null,
+          |    "regionCode": null,
+          |    "traderDedicated": false,
+          |    "dedicatedTraderLanguageCode": null,
+          |    "dedicatedTraderName": null,
+          |    "customsOfficeSpecificNotesCodes": [
+          |      "SN0009"
+          |    ],
+          |    "customsOfficeLsd": {
+          |      "city": "Hirtshals",
+          |      "languageCode": "DA",
+          |      "spaceToAdd": false,
+          |      "customsOfficeUsualName": "Hirtshals Toldekspedition",
+          |      "prefixSuffixFlag": false,
+          |      "streetAndNumber": "Dalsagervej 7"
+          |    },
+          |    "customsOfficeTimetable": {
+          |      "seasonCode": 1,
+          |      "seasonStartDate": "2018-01-01",
+          |      "seasonEndDate": "2099-12-31",
+          |      "customsOfficeTimetableLine": [
+          |        {
+          |          "dayInTheWeekEndDay": 5,
+          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |          "dayInTheWeekBeginDay": 1,
+          |          "openingHoursTimeFirstPeriodTo": "16:00:00",
+          |          "customsOfficeRoleTrafficCompetence": [
+          |            {
+          |              "roleName": "EXL",
+          |              "trafficType": "P"
+          |            },
+          |            {
+          |              "roleName": "EXL",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "EXP",
+          |              "trafficType": "P"
+          |            },
+          |            {
+          |              "roleName": "EXP",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "EXT",
+          |              "trafficType": "P"
+          |            },
+          |            {
+          |              "roleName": "EXT",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "PLA",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "RFC",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "DIS",
+          |              "trafficType": "N/A"
+          |            },
+          |            {
+          |              "roleName": "IPR",
+          |              "trafficType": "N/A"
+          |            },
+          |            {
+          |              "roleName": "ENQ",
+          |              "trafficType": "P"
+          |            },
+          |            {
+          |              "roleName": "ENQ",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "ENQ",
+          |              "trafficType": "N/A"
+          |            },
+          |            {
+          |              "roleName": "REC",
+          |              "trafficType": "P"
+          |            },
+          |            {
+          |              "roleName": "REC",
+          |              "trafficType": "R"
+          |            },
+          |            {
+          |              "roleName": "REC",
+          |              "trafficType": "N/A"
+          |            }
+          |          ]
+          |        }
+          |      ]
+          |    }
+          |  }
+       ]""".stripMargin)
+    }
   }
