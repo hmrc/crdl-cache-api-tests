@@ -233,7 +233,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           |   "key": "15071010",
           |  "value": "E200",
           |  "properties": {
-          |    "actionIdentification": "408"
+          |    "actionIdentification": "389"
           |  }
           | }
           |""".stripMargin),
@@ -241,7 +241,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           |  "key": "15079010",
           |  "value": "E200",
           |  "properties": {
-          |    "actionIdentification": "409"
+          |    "actionIdentification": "390"
           |  }
           | }
           |""".stripMargin),
@@ -249,7 +249,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           |  "key": "15081010",
           |  "value": "E200",
           |  "properties": {
-          |    "actionIdentification": "410"
+          |    "actionIdentification": "391"
           |  }
           | }
           |""".stripMargin),
@@ -257,7 +257,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           |  "key": "15089010",
           |  "value": "E200",
           |  "properties": {
-          |    "actionIdentification": "411"
+          |    "actionIdentification": "392"
           |  }
           |  }
           |""".stripMargin)
