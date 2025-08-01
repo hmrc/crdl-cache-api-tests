@@ -36,8 +36,9 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
     Scenario("To verify whether Get CustomsOffice list executes successfully") {
       Given("The endpoint is accessed")
       val getCustomOfficelist_response = getCustomsOfficeList()
-      getCustomOfficelist_response.status        shouldBe 200
-      getCustomOfficelist_response.body[JsValue] shouldBe Json.parse("""[{
+      getCustomOfficelist_response.status shouldBe 200
+      getCustomOfficelist_response.body[JsValue] shouldBe Json.parse(
+        """[{
           |    "referenceNumber": "IT314102",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": "ITP00023",
@@ -60,88 +61,90 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |    "dedicatedTraderName": "TIN",
           |    "customsOfficeSpecificNotesCodes": [],
           |    "customsOfficeLsd": {
-          |      "city": "ORBASSANO (TO)",
-          |      "prefixSuffixLevel": "A",
-          |      "languageCode": "IT",
-          |      "spaceToAdd": true,
           |      "customsOfficeUsualName": "ORBASSANO",
+          |      "languageCode": "IT",
+          |      "city": "ORBASSANO (TO)",
           |      "prefixSuffixFlag": false,
+          |      "prefixSuffixLevel": "A",
+          |      "spaceToAdd": true,
           |      "streetAndNumber": "Prima Strada, 5"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonStartDate": "2024-01-01",
-          |      "seasonName": "ALL YEAR",
-          |      "seasonCode": 1,
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 5,
-          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "18:00:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "DEP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "INC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "TRA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EIN",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "ENT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "DES",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "GUA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REG",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ],
-          |      "seasonEndDate": "9999-12-31"
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonName": "ALL YEAR",
+          |        "seasonStartDate": "2024-01-01",
+          |        "seasonEndDate": "9999-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "18:00:00",
+          |            "dayInTheWeekEndDay": 5,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "DEP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "INC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "TRA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EIN",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "ENT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "DES",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "GUA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REG",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  },
-          |  {
+          | {
           |    "referenceNumber": "DK003102",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": null,
@@ -166,94 +169,96 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |      "SN0009"
           |    ],
           |    "customsOfficeLsd": {
-          |      "city": "Hirtshals",
-          |      "languageCode": "DA",
-          |      "spaceToAdd": false,
           |      "customsOfficeUsualName": "Hirtshals Toldekspedition",
+          |      "languageCode": "DA",
+          |      "city": "Hirtshals",
           |      "prefixSuffixFlag": false,
+          |      "spaceToAdd": false,
           |      "streetAndNumber": "Dalsagervej 7"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonCode": 1,
-          |      "seasonStartDate": "2018-01-01",
-          |      "seasonEndDate": "2099-12-31",
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 5,
-          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "16:00:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "EXL",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXL",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "PLA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "RFC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "DIS",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ]
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonStartDate": "2018-01-01",
+          |        "seasonEndDate": "2099-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "16:00:00",
+          |            "dayInTheWeekEndDay": 5,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "EXL",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXL",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "PLA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "RFC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "DIS",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  },
-          |  {
+          | {
           |    "referenceNumber": "IT223101",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": "ITP00002",
@@ -276,98 +281,100 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |    "dedicatedTraderName": "TIN",
           |    "customsOfficeSpecificNotesCodes": [],
           |    "customsOfficeLsd": {
-          |      "city": "BOLOGNA",
-          |      "prefixSuffixLevel": "A",
-          |      "languageCode": "IT",
-          |      "spaceToAdd": true,
           |      "customsOfficeUsualName": "AEROPORTO DI BOLOGNA",
+          |      "languageCode": "IT",
+          |      "city": "BOLOGNA",
           |      "prefixSuffixFlag": false,
+          |      "prefixSuffixLevel": "A",
+          |      "spaceToAdd": true,
           |      "streetAndNumber": "VIA DELL'AEROPORTO, 1"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonStartDate": "2018-01-01",
-          |      "seasonName": "ALL YEAR",
-          |      "seasonCode": 1,
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 6,
-          |          "openingHoursTimeFirstPeriodFrom": "00:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "23:59:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "DEP",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "INC",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "TXT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "DES",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EXC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "REG",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "TRA",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EIN",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "PLA",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "DIS",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "RFC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ],
-          |      "seasonEndDate": "2099-12-31"
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonName": "ALL YEAR",
+          |        "seasonStartDate": "2018-01-01",
+          |        "seasonEndDate": "2099-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "00:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "23:59:00",
+          |            "dayInTheWeekEndDay": 6,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "DEP",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "INC",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "TXT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "DES",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EXC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "REG",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "TRA",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EIN",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "PLA",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "DIS",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "RFC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  },
           |  {
           |    "referenceNumber": "IT223100",
@@ -392,80 +399,83 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |    "dedicatedTraderName": "TIN",
           |    "customsOfficeSpecificNotesCodes": [],
           |    "customsOfficeLsd": {
-          |      "city": "BOLOGNA",
-          |      "prefixSuffixLevel": "A",
-          |      "languageCode": "IT",
-          |      "spaceToAdd": true,
           |      "customsOfficeUsualName": "EMILIA 1 BOLOGNA",
+          |      "languageCode": "IT",
+          |      "city": "BOLOGNA",
           |      "prefixSuffixFlag": false,
+          |      "prefixSuffixLevel": "A",
+          |      "spaceToAdd": true,
           |      "streetAndNumber": "VIALE PIETRAMELLARA, 1/2"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonStartDate": "2018-01-01",
-          |      "seasonName": "ALL YEAR",
-          |      "seasonCode": 1,
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 6,
-          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "18:00:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "EXC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REG",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "SCO",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "PLA",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "DIS",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "RFC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ],
-          |      "seasonEndDate": "2099-12-31"
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonName": "ALL YEAR",
+          |        "seasonStartDate": "2018-01-01",
+          |        "seasonEndDate": "2099-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "18:00:00",
+          |            "dayInTheWeekEndDay": 6,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "EXC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REG",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "SCO",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "PLA",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "DIS",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "RFC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  }
            ]""".stripMargin)
     }
 
     Scenario("To verify whether user is able to filter CustomsOffice list by countryCode and roles") {
       Given("The endpoint is accessed")
-      val testOnlyUrl                          = s"$host/offices?countryCodes=IT&roles=TRA"
+      val testOnlyUrl = s"$host/offices?countryCodes=IT&roles=TRA"
       val getCustomsofficelistByRoles_response = await(
         get(
           testOnlyUrl
         )
       )
-      getCustomsofficelistByRoles_response.status        shouldBe 200
-      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
+      getCustomsofficelistByRoles_response.status shouldBe 200
+      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse(
+        """[{
           |    "referenceNumber": "IT223101",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": "ITP00002",
@@ -488,98 +498,100 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |    "dedicatedTraderName": "TIN",
           |    "customsOfficeSpecificNotesCodes": [],
           |    "customsOfficeLsd": {
-          |      "city": "BOLOGNA",
-          |      "prefixSuffixLevel": "A",
-          |      "languageCode": "IT",
-          |      "spaceToAdd": true,
           |      "customsOfficeUsualName": "AEROPORTO DI BOLOGNA",
+          |      "languageCode": "IT",
+          |      "city": "BOLOGNA",
           |      "prefixSuffixFlag": false,
+          |      "prefixSuffixLevel": "A",
+          |      "spaceToAdd": true,
           |      "streetAndNumber": "VIA DELL'AEROPORTO, 1"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonStartDate": "2018-01-01",
-          |      "seasonName": "ALL YEAR",
-          |      "seasonCode": 1,
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 6,
-          |          "openingHoursTimeFirstPeriodFrom": "00:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "23:59:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "DEP",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "INC",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "TXT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "DES",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EXC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "REG",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "TRA",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "EIN",
-          |              "trafficType": "AIR"
-          |            },
-          |            {
-          |              "roleName": "PLA",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "DIS",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "RFC",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ],
-          |      "seasonEndDate": "2099-12-31"
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonName": "ALL YEAR",
+          |        "seasonStartDate": "2018-01-01",
+          |        "seasonEndDate": "2099-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "00:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "23:59:00",
+          |            "dayInTheWeekEndDay": 6,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "DEP",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "INC",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "TXT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "DES",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EXC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "REG",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "TRA",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "EIN",
+          |                "trafficType": "AIR"
+          |              },
+          |              {
+          |                "roleName": "PLA",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "DIS",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "RFC",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  },
           |  {
           |    "referenceNumber": "IT314102",
@@ -604,100 +616,103 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |    "dedicatedTraderName": "TIN",
           |    "customsOfficeSpecificNotesCodes": [],
           |    "customsOfficeLsd": {
-          |      "city": "ORBASSANO (TO)",
-          |      "prefixSuffixLevel": "A",
-          |      "languageCode": "IT",
-          |      "spaceToAdd": true,
           |      "customsOfficeUsualName": "ORBASSANO",
+          |      "languageCode": "IT",
+          |      "city": "ORBASSANO (TO)",
           |      "prefixSuffixFlag": false,
+          |      "prefixSuffixLevel": "A",
+          |      "spaceToAdd": true,
           |      "streetAndNumber": "Prima Strada, 5"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonStartDate": "2024-01-01",
-          |      "seasonName": "ALL YEAR",
-          |      "seasonCode": 1,
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 5,
-          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "18:00:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "DEP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "INC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "TRA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EIN",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "ENT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "DES",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "GUA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REG",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ],
-          |      "seasonEndDate": "9999-12-31"
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonName": "ALL YEAR",
+          |        "seasonStartDate": "2024-01-01",
+          |        "seasonEndDate": "9999-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "18:00:00",
+          |            "dayInTheWeekEndDay": 5,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "DEP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "INC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "TRA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EIN",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "ENT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "DES",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "GUA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REG",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  }
        ]""".stripMargin)
     }
 
     Scenario("To verify whether user is able to filter CustomsOffice list by referenceNumbers") {
       Given("The endpoint is accessed")
-      val testOnlyUrl                          = s"$host/offices?referenceNumbers=DK003102"
+      val testOnlyUrl = s"$host/offices?referenceNumbers=DK003102"
       val getCustomsofficelistByRoles_response = await(
         get(
           testOnlyUrl
         )
       )
-      getCustomsofficelistByRoles_response.status        shouldBe 200
-      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
+      getCustomsofficelistByRoles_response.status shouldBe 200
+      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse(
+        """[{
           |    "referenceNumber": "DK003102",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": null,
@@ -722,92 +737,94 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
           |      "SN0009"
           |    ],
           |    "customsOfficeLsd": {
-          |      "city": "Hirtshals",
-          |      "languageCode": "DA",
-          |      "spaceToAdd": false,
           |      "customsOfficeUsualName": "Hirtshals Toldekspedition",
+          |      "languageCode": "DA",
+          |      "city": "Hirtshals",
           |      "prefixSuffixFlag": false,
+          |      "spaceToAdd": false,
           |      "streetAndNumber": "Dalsagervej 7"
           |    },
-          |    "customsOfficeTimetable": {
-          |      "seasonCode": 1,
-          |      "seasonStartDate": "2018-01-01",
-          |      "seasonEndDate": "2099-12-31",
-          |      "customsOfficeTimetableLine": [
-          |        {
-          |          "dayInTheWeekEndDay": 5,
-          |          "openingHoursTimeFirstPeriodFrom": "08:00:00",
-          |          "dayInTheWeekBeginDay": 1,
-          |          "openingHoursTimeFirstPeriodTo": "16:00:00",
-          |          "customsOfficeRoleTrafficCompetence": [
-          |            {
-          |              "roleName": "EXL",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXL",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXP",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "EXT",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "PLA",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "RFC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "DIS",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "IPR",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "ENQ",
-          |              "trafficType": "N/A"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "P"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "R"
-          |            },
-          |            {
-          |              "roleName": "REC",
-          |              "trafficType": "N/A"
-          |            }
-          |          ]
-          |        }
-          |      ]
-          |    }
+          |    "customsOfficeTimetable": [
+          |      {
+          |        "seasonCode": 1,
+          |        "seasonStartDate": "2018-01-01",
+          |        "seasonEndDate": "2099-12-31",
+          |        "customsOfficeTimetableLine": [
+          |          {
+          |            "dayInTheWeekBeginDay": 1,
+          |            "openingHoursTimeFirstPeriodFrom": "08:00:00",
+          |            "openingHoursTimeFirstPeriodTo": "16:00:00",
+          |            "dayInTheWeekEndDay": 5,
+          |            "customsOfficeRoleTrafficCompetence": [
+          |              {
+          |                "roleName": "EXL",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXL",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXP",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "EXT",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "PLA",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "RFC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "DIS",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "IPR",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "ENQ",
+          |                "trafficType": "N/A"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "P"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "R"
+          |              },
+          |              {
+          |                "roleName": "REC",
+          |                "trafficType": "N/A"
+          |              }
+          |            ]
+          |          }
+          |        ]
+          |      }
+          |    ]
           |  }
        ]""".stripMargin)
     }
