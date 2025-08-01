@@ -36,9 +36,8 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
     Scenario("To verify whether Get CustomsOffice list executes successfully") {
       Given("The endpoint is accessed")
       val getCustomOfficelist_response = getCustomsOfficeList()
-      getCustomOfficelist_response.status shouldBe 200
-      getCustomOfficelist_response.body[JsValue] shouldBe Json.parse(
-        """[{
+      getCustomOfficelist_response.status        shouldBe 200
+      getCustomOfficelist_response.body[JsValue] shouldBe Json.parse("""[{
           |    "referenceNumber": "IT314102",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": "ITP00023",
@@ -467,15 +466,14 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
 
     Scenario("To verify whether user is able to filter CustomsOffice list by countryCode and roles") {
       Given("The endpoint is accessed")
-      val testOnlyUrl = s"$host/offices?countryCodes=IT&roles=TRA"
+      val testOnlyUrl                          = s"$host/offices?countryCodes=IT&roles=TRA"
       val getCustomsofficelistByRoles_response = await(
         get(
           testOnlyUrl
         )
       )
-      getCustomsofficelistByRoles_response.status shouldBe 200
-      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse(
-        """[{
+      getCustomsofficelistByRoles_response.status        shouldBe 200
+      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
           |    "referenceNumber": "IT223101",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": "ITP00002",
@@ -704,15 +702,14 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
 
     Scenario("To verify whether user is able to filter CustomsOffice list by referenceNumbers") {
       Given("The endpoint is accessed")
-      val testOnlyUrl = s"$host/offices?referenceNumbers=DK003102"
+      val testOnlyUrl                          = s"$host/offices?referenceNumbers=DK003102"
       val getCustomsofficelistByRoles_response = await(
         get(
           testOnlyUrl
         )
       )
-      getCustomsofficelistByRoles_response.status shouldBe 200
-      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse(
-        """[{
+      getCustomsofficelistByRoles_response.status        shouldBe 200
+      getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
           |    "referenceNumber": "DK003102",
           |    "referenceNumberMainOffice": null,
           |    "referenceNumberHigherAuthority": null,
