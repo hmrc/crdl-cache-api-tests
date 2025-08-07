@@ -21,10 +21,13 @@ import play.api.libs.ws.{EmptyBody, StandaloneWSResponse}
 import uk.gov.hmrc.api.specs.BaseSpec
 import uk.gov.hmrc.apitestrunner.http.HttpClient as TestRunnerHttpClient
 
+import java.util.UUID
 import scala.concurrent.Future
 
 trait HttpClient extends TestRunnerHttpClient:
   this: BaseSpec =>
+
+  val InternalAuthToken = UUID.randomUUID().toString
 
   def get(url: String, headers: (String, String)*): Future[StandaloneWSResponse] =
     mkRequest(url)
@@ -46,6 +49,23 @@ trait HttpClient extends TestRunnerHttpClient:
       .withHttpHeaders(headers*)
       .delete()
 
+  def createInternalAuthToken(): StandaloneWSResponse =
+    await(
+      post(
+        "http://localhost:8470/test-only/token",
+        s"""{
+           |  "token": "$InternalAuthToken",
+           |  "principal": "emcs-tfe-crdl-reference-data",
+           |  "permissions": [{
+           |    "resourceType": "crdl-cache",
+           |    "resourceLocation": "*",
+           |    "actions": ["READ"]
+           |  }]
+           |}""".stripMargin,
+        "Content-Type" -> "application/json"
+      )
+    )
+
   def deleteList(list: String): StandaloneWSResponse = await(delete(s"$testOnlyHost/$list"))
 
   def deleteLastUpdated(): StandaloneWSResponse = await(delete(s"$testOnlyHost/last-updated"))
@@ -54,8 +74,10 @@ trait HttpClient extends TestRunnerHttpClient:
 
   def getImportStatus(list: String): StandaloneWSResponse = await(get(s"$testOnlyHost/$list"))
 
-  def getCodelist(code: String): StandaloneWSResponse = await(get(s"$host/lists/$code"))
+  def getCodelist(code: String): StandaloneWSResponse = await(
+    get(s"$host/lists/$code", "Authorization" -> InternalAuthToken)
+  )
 
-  def getCodelistVersions(): StandaloneWSResponse = await(get(s"$host/lists"))
+  def getCodelistVersions(): StandaloneWSResponse = await(get(s"$host/lists", "Authorization" -> InternalAuthToken))
 
-  def getCustomsOfficeList(): StandaloneWSResponse = await(get(s"$host/offices"))
+  def getCustomsOfficeList(): StandaloneWSResponse = await(get(s"$host/offices", "Authorization" -> InternalAuthToken))

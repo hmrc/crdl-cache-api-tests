@@ -26,6 +26,7 @@ import java.time.Instant
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
+    createInternalAuthToken()
     deleteList("codelists")
     deleteLastUpdated()
     deleteList("correspondence-lists")
@@ -116,10 +117,11 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
       val getCodelistByKeys_response = await(
         get(
-          testOnlyUrl
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
         )
       )
-      getCodelistByKeys_response.status        shouldBe 200
+      getCodelistByKeys_response.status shouldBe 200
       getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
             |   "key": "B",
             |  "value": "Beer",
@@ -150,10 +152,11 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
         s"$host/lists/BC36?exciseProductsCategoryCode=E&densityApplicabilityFlag=false&alcoholicStrengthApplicabilityFlag=false"
       val getCodelistByKeys_response = await(
         get(
-          testOnlyUrl
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
         )
       )
-      getCodelistByKeys_response.status        shouldBe 200
+      getCodelistByKeys_response.status shouldBe 200
       getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
             |  "key": "E470",
             |  "value": "Heavy fuel oil falling within CN codes 2710 19 62, 2710 19 66, 2710 19 67, 2710 20 32 and 2710 20 38 (Article 20(1)(c) of Directive 2003/96/EC)",
