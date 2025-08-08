@@ -23,6 +23,7 @@ import uk.gov.hmrc.api.client.HttpClient
 
 class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
+    createInternalAuthToken()
     deleteList("customs-office-lists")
     importLists("customs-office-lists").status shouldBe 202
     eventually {
@@ -469,10 +470,11 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
       val testOnlyUrl                          = s"$host/offices?countryCodes=IT&roles=TRA"
       val getCustomsofficelistByRoles_response = await(
         get(
-          testOnlyUrl
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
         )
       )
-      getCustomsofficelistByRoles_response.status        shouldBe 200
+      getCustomsofficelistByRoles_response.status shouldBe 200
       getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
           |    "referenceNumber": "IT223101",
           |    "referenceNumberMainOffice": null,
@@ -705,10 +707,11 @@ class ImportCustomsOfficelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfte
       val testOnlyUrl                          = s"$host/offices?referenceNumbers=DK003102"
       val getCustomsofficelistByRoles_response = await(
         get(
-          testOnlyUrl
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
         )
       )
-      getCustomsofficelistByRoles_response.status        shouldBe 200
+      getCustomsofficelistByRoles_response.status shouldBe 200
       getCustomsofficelistByRoles_response.body[JsValue] shouldBe Json.parse("""[{
           |    "referenceNumber": "DK003102",
           |    "referenceNumberMainOffice": null,
