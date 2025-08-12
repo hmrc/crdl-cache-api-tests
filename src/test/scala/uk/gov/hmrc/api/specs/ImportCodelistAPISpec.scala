@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.api.specs
+
 import org.scalatest.BeforeAndAfterAll
 import play.api.libs.json.Reads.*
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -22,7 +23,8 @@ import play.api.libs.ws.DefaultBodyReadables.*
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import uk.gov.hmrc.api.client.HttpClient
 
-import java.time.Instant
+import java.time.{Instant, LocalDate, ZoneOffset, ZonedDateTime}
+import java.time.format.DateTimeFormatter
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
@@ -46,34 +48,41 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       Given("The endpoint is accessed")
       val getCodelist_response = getCodelist("BC08")
       getCodelist_response.status        shouldBe 200
-      getCodelist_response.body[JsValue] shouldBe Json.parse("""[{
-            |   "key": "BL",
-            |  "value": "Saint Barthélemy",
-            |  "properties": {
-            |    "actionIdentification": "823"
-            |  }
-            | } ,
-            | {
-            |  "key": "BM",
-            |  "value": "Bermuda",
-            |  "properties": {
-            |    "actionIdentification": "824"
-            |  }
-            | },
-            | {
-            |  "key": "CX",
-            |  "value": "Christmas Island",
-            |  "properties": {
-            |    "actionIdentification": "848"
-            |  }
-            | },
-            | {
-            |  "key": "CY",
-            |  "value": "Cyprus",
-            |  "properties": {
-            |    "actionIdentification": "849"
-            |  }
-            |  }
+      getCodelist_response.body[JsValue] shouldBe Json.parse("""[ {
+          |    "key": "BL",
+          |    "value": "Saint Barthélemy",
+          |    "properties": {
+          |      "actionIdentification": "823"
+          |    }
+          |  },
+          |  {
+          |    "key": "BM",
+          |    "value": "Bermuda",
+          |    "properties": {
+          |      "actionIdentification": "824"
+          |    }
+          |  },
+          |  {
+          |    "key": "CX",
+          |    "value": "Christmas Island",
+          |    "properties": {
+          |      "actionIdentification": "848"
+          |    }
+          |  },
+          |  {
+          |    "key": "CY",
+          |    "value": "Cyprus",
+          |    "properties": {
+          |      "actionIdentification": "849"
+          |    }
+          |  },
+          |  {
+          |    "key": "CZ",
+          |    "value": "Czechia",
+          |    "properties": {
+          |      "actionIdentification": "850"
+          |    }
+          |  }
 ]""".stripMargin)
     }
 
@@ -123,26 +132,26 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       )
       getCodelistByKeys_response.status shouldBe 200
       getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
-            |   "key": "B",
-            |  "value": "Beer",
-            |  "properties": {
-            |    "actionIdentification": "1084"
-            |  }
-            | } ,
-            | {
-            |  "key": "S",
-            |  "value": "Ethyl alcohol and spirits",
-            |  "properties": {
-            |    "actionIdentification": "1087"
-            |  }
-            | },
-            | {
-            |  "key": "W",
-            |  "value": "Wine and fermented beverages other than wine and beer",
-            |  "properties": {
-            |    "actionIdentification": "1089"
-            |  }
-            |}
+          |   "key": "B",
+          |  "value": "Beer",
+          |  "properties": {
+          |    "actionIdentification": "1084"
+          |  }
+          | } ,
+          | {
+          |  "key": "S",
+          |  "value": "Ethyl alcohol and spirits",
+          |  "properties": {
+          |    "actionIdentification": "1087"
+          |  }
+          | },
+          | {
+          |  "key": "W",
+          |  "value": "Wine and fermented beverages other than wine and beer",
+          |  "properties": {
+          |    "actionIdentification": "1089"
+          |  }
+          |}
             ]""".stripMargin)
     }
 
@@ -158,55 +167,213 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       )
       getCodelistByKeys_response.status shouldBe 200
       getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[{
-            |  "key": "E470",
-            |  "value": "Heavy fuel oil falling within CN codes 2710 19 62, 2710 19 66, 2710 19 67, 2710 20 32 and 2710 20 38 (Article 20(1)(c) of Directive 2003/96/EC)",
-            |  "properties": {
-            |    "unitOfMeasureCode": "1",
-            |    "degreePlatoApplicabilityFlag": false,
-            |    "actionIdentification": "1099",
-            |    "exciseProductsCategoryCode": "E",
-            |    "alcoholicStrengthApplicabilityFlag": false,
-            |    "densityApplicabilityFlag": false
-            |  }
-            | } ,
-            | {
-            |  "key": "E500",
-            |  "value": "Liquified Petroleum gases (LPG) Products falling within CN codes 2711 (except 2711 11, 2711 21 and 2711 29)",
-            |  "properties": {
-            |    "unitOfMeasureCode": "1",
-            |    "degreePlatoApplicabilityFlag": false,
-            |    "actionIdentification": "1102",
-            |    "exciseProductsCategoryCode": "E",
-            |    "alcoholicStrengthApplicabilityFlag": false,
-            |    "densityApplicabilityFlag": false
-            |  }
-            | },
-            |{
-            |  "key": "E600",
-            |  "value": "Saturated acyclic hydrocarbons Products falling within CN code 2901 10",
-            |  "properties": {
-            |    "unitOfMeasureCode": "1",
-            |    "degreePlatoApplicabilityFlag": false,
-            |    "actionIdentification": "1103",
-            |    "exciseProductsCategoryCode": "E",
-            |    "alcoholicStrengthApplicabilityFlag": false,
-            |    "densityApplicabilityFlag": false
-            |    }
-            | },
-            | {
-            |  "key": "E930",
-            |   "value": "Additives falling within CN codes 3811 11, 3811 19 00 and 3811 90 00",
-            |  "properties": {
-            |   "unitOfMeasureCode": "2",
-            |   "degreePlatoApplicabilityFlag": false,
-            |   "actionIdentification": "1108",
-            |   "exciseProductsCategoryCode": "E",
-            |   "alcoholicStrengthApplicabilityFlag": false,
-            |   "densityApplicabilityFlag": false
-            |  }
-            | }
+          |  "key": "E470",
+          |  "value": "Heavy fuel oil falling within CN codes 2710 19 62, 2710 19 66, 2710 19 67, 2710 20 32 and 2710 20 38 (Article 20(1)(c) of Directive 2003/96/EC)",
+          |  "properties": {
+          |    "unitOfMeasureCode": "1",
+          |    "degreePlatoApplicabilityFlag": false,
+          |    "actionIdentification": "1099",
+          |    "exciseProductsCategoryCode": "E",
+          |    "alcoholicStrengthApplicabilityFlag": false,
+          |    "densityApplicabilityFlag": false
+          |  }
+          | } ,
+          | {
+          |  "key": "E500",
+          |  "value": "Liquified Petroleum gases (LPG) Products falling within CN codes 2711 (except 2711 11, 2711 21 and 2711 29)",
+          |  "properties": {
+          |    "unitOfMeasureCode": "1",
+          |    "degreePlatoApplicabilityFlag": false,
+          |    "actionIdentification": "1102",
+          |    "exciseProductsCategoryCode": "E",
+          |    "alcoholicStrengthApplicabilityFlag": false,
+          |    "densityApplicabilityFlag": false
+          |  }
+          | },
+          |{
+          |  "key": "E600",
+          |  "value": "Saturated acyclic hydrocarbons Products falling within CN code 2901 10",
+          |  "properties": {
+          |    "unitOfMeasureCode": "1",
+          |    "degreePlatoApplicabilityFlag": false,
+          |    "actionIdentification": "1103",
+          |    "exciseProductsCategoryCode": "E",
+          |    "alcoholicStrengthApplicabilityFlag": false,
+          |    "densityApplicabilityFlag": false
+          |    }
+          | },
+          | {
+          |  "key": "E930",
+          |   "value": "Additives falling within CN codes 3811 11, 3811 19 00 and 3811 90 00",
+          |  "properties": {
+          |   "unitOfMeasureCode": "2",
+          |   "degreePlatoApplicabilityFlag": false,
+          |   "actionIdentification": "1108",
+          |   "exciseProductsCategoryCode": "E",
+          |   "alcoholicStrengthApplicabilityFlag": false,
+          |   "densityApplicabilityFlag": false
+          |  }
+          | }
             ]""".stripMargin)
     }
+
+    Scenario("Verify fetching country code before activation date") {
+      Given("The endpoint is accessed")
+      val DateTimeFormat             = DateTimeFormatter.ISO_DATE_TIME
+      val activeAtDate               = DateTimeFormat.format(ZonedDateTime.now(ZoneOffset.UTC).minusDays(30))
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=$activeAtDate"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
+        )
+      )
+      getCodelistByKeys_response.status shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[ {
+          |    "key": "BL",
+          |    "value": "Saint Barthélemy",
+          |    "properties": {
+          |      "actionIdentification": "823"
+          |    }
+          |  },
+          |  {
+          |    "key": "BM",
+          |    "value": "Bermuda",
+          |    "properties": {
+          |      "actionIdentification": "824"
+          |    }
+          |  },
+          |  {
+          |    "key": "CX",
+          |    "value": "Christmas Island",
+          |    "properties": {
+          |      "actionIdentification": "848"
+          |    }
+          |  },
+          |  {
+          |    "key": "CY",
+          |    "value": "Cyprus",
+          |    "properties": {
+          |      "actionIdentification": "849"
+          |    }
+          |  },
+          |  {
+          |    "key": "CZ",
+          |    "value": "Czech Republic",
+          |    "properties": {
+          |      "actionIdentification": "850"
+          |    }
+          |  }
+               ]""".stripMargin)
+    }
+//    In the above scenario Czechia will not appear as its activation date is Today minus 29 days
+
+    Scenario("Verify fetching multiple country code after activation date") {
+      Given("The endpoint is accessed")
+      val DateTimeFormat             = DateTimeFormatter.ISO_DATE_TIME
+      val activeAtDate               = DateTimeFormat.format(ZonedDateTime.now(ZoneOffset.UTC).minusDays(28))
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=$activeAtDate"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
+        )
+      )
+      getCodelistByKeys_response.status shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[ {
+          |    "key": "BL",
+          |    "value": "Saint Barthélemy",
+          |    "properties": {
+          |      "actionIdentification": "823"
+          |    }
+          |  },
+          |  {
+          |    "key": "BM",
+          |    "value": "Bermuda",
+          |    "properties": {
+          |      "actionIdentification": "824"
+          |    }
+          |  },
+          |  {
+          |    "key": "CX",
+          |    "value": "Christmas Island",
+          |    "properties": {
+          |      "actionIdentification": "848"
+          |    }
+          |  },
+          |  {
+          |    "key": "CY",
+          |    "value": "Cyprus",
+          |    "properties": {
+          |      "actionIdentification": "849"
+          |    }
+          |  },
+          |  {
+          |    "key": "CZ",
+          |    "value": "Czechia",
+          |    "properties": {
+          |      "actionIdentification": "850"
+          |    }
+          |  }
+               ]""".stripMargin)
+    }
+//    In the above scenario Czech Republic will not appear and Czechia will appear. Also Disputed Western Territory will not appear as its activation date is in future 18-01-9999
+
+    Scenario("Verify fetching multiple country code to validate future dated activation date") {
+      Given("The endpoint is accessed")
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=9999-01-18T10:16:29.020Z"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
+        )
+      )
+      getCodelistByKeys_response.status shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[ {
+          |    "key": "BL",
+          |    "value": "Saint Barthélemy",
+          |    "properties": {
+          |      "actionIdentification": "823"
+          |    }
+          |  },
+          |  {
+          |    "key": "BM",
+          |    "value": "Bermuda",
+          |    "properties": {
+          |      "actionIdentification": "824"
+          |    }
+          |  },
+          |  {
+          |    "key": "CX",
+          |    "value": "Christmas Island",
+          |    "properties": {
+          |      "actionIdentification": "848"
+          |    }
+          |  },
+          |  {
+          |    "key": "CY",
+          |    "value": "Cyprus",
+          |    "properties": {
+          |      "actionIdentification": "849"
+          |    }
+          |  },
+          |  {
+          |    "key": "CZ",
+          |    "value": "Czechia",
+          |    "properties": {
+          |      "actionIdentification": "850"
+          |    }
+          |  },
+          |  {
+          |    "key": "QZ",
+          |    "value": "Disputed Western Territories",
+          |    "properties": {
+          |      "actionIdentification": "9999"
+          |    }
+          |  }
+               ]""".stripMargin)
+    }
+    //    In the above scenario Disputed Western Territory will appear as its activation date is in future 18-01-9999
 
     Scenario("To verify Delete Codelist request is successful") {
       Given("The endpoint is accessed")
@@ -225,44 +392,44 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
       getCodelistVersions_response.status        shouldBe 200
       getCodelistVersions_response.body[JsValue] shouldBe Json.arr()
     }
-  }
 
-  Scenario("To verify whether Get Correspondence list executes successfully") {
-    Given("The endpoint is accessed")
-    val getCodelist_response = getCodelist("E200")
-    getCodelist_response.status                                  shouldBe 200
-    getCodelist_response.body[JsValue].as[List[JsValue]].take(4) shouldBe List(
-      Json.parse("""{
-          |   "key": "15071010",
-          |  "value": "E200",
-          |  "properties": {
-          |    "actionIdentification": "389"
-          |  }
-          | }
-          |""".stripMargin),
-      Json.parse(""" {
-          |  "key": "15079010",
-          |  "value": "E200",
-          |  "properties": {
-          |    "actionIdentification": "390"
-          |  }
-          | }
-          |""".stripMargin),
-      Json.parse(""" {
-          |  "key": "15081010",
-          |  "value": "E200",
-          |  "properties": {
-          |    "actionIdentification": "391"
-          |  }
-          | }
-          |""".stripMargin),
-      Json.parse("""{
-          |  "key": "15089010",
-          |  "value": "E200",
-          |  "properties": {
-          |    "actionIdentification": "392"
-          |  }
-          |  }
-          |""".stripMargin)
-    )
+    Scenario("To verify whether Get Correspondence list executes successfully") {
+      Given("The endpoint is accessed")
+      val getCodelist_response = getCodelist("E200")
+      getCodelist_response.status                                  shouldBe 200
+      getCodelist_response.body[JsValue].as[List[JsValue]].take(4) shouldBe List(
+        Json.parse("""{
+            |   "key": "15071010",
+            |  "value": "E200",
+            |  "properties": {
+            |    "actionIdentification": "389"
+            |  }
+            | }
+            |""".stripMargin),
+        Json.parse(""" {
+            |  "key": "15079010",
+            |  "value": "E200",
+            |  "properties": {
+            |    "actionIdentification": "390"
+            |  }
+            | }
+            |""".stripMargin),
+        Json.parse(""" {
+            |  "key": "15081010",
+            |  "value": "E200",
+            |  "properties": {
+            |    "actionIdentification": "391"
+            |  }
+            | }
+            |""".stripMargin),
+        Json.parse("""{
+            |  "key": "15089010",
+            |  "value": "E200",
+            |  "properties": {
+            |    "actionIdentification": "392"
+            |  }
+            |  }
+            |""".stripMargin)
+      )
+    }
   }
