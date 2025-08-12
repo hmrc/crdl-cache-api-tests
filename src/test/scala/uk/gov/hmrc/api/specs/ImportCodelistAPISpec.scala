@@ -23,7 +23,8 @@ import play.api.libs.ws.DefaultBodyReadables.*
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import uk.gov.hmrc.api.client.HttpClient
 
-import java.time.Instant
+import java.time.{Instant, LocalDate, ZoneOffset, ZonedDateTime}
+import java.time.format.DateTimeFormatter
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
   override def beforeAll(): Unit = {
@@ -218,7 +219,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
 
     Scenario("Verify fetching country code before activation date") {
       Given("The endpoint is accessed")
-      val testOnlyUrl                = s"$host/lists/BC08?activeAt=2025-07-10T10:16:29.020Z"
+      val DateTimeFormat             = DateTimeFormatter.ISO_DATE_TIME
+      val activeAtDate               = DateTimeFormat.format(ZonedDateTime.now(ZoneOffset.UTC).minusDays(30))
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=$activeAtDate"
       val getCodelistByKeys_response = await(
         get(
           testOnlyUrl,
@@ -267,7 +270,9 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
 
     Scenario("Verify fetching multiple country code after activation date") {
       Given("The endpoint is accessed")
-      val testOnlyUrl                = s"$host/lists/BC08?activeAt=2025-07-13T10:16:29.020Z"
+      val DateTimeFormat             = DateTimeFormatter.ISO_DATE_TIME
+      val activeAtDate               = DateTimeFormat.format(ZonedDateTime.now(ZoneOffset.UTC).minusDays(28))
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=$activeAtDate"
       val getCodelistByKeys_response = await(
         get(
           testOnlyUrl,
@@ -312,7 +317,63 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
           |  }
                ]""".stripMargin)
     }
-//    In the above scenario Czech Republic will not appear and Czechia will appear
+//    In the above scenario Czech Republic will not appear and Czechia will appear. Also Disputed Western Territory will not appear as its activation date is in future 18-01-9999
+
+    Scenario("Verify fetching multiple country code to validate future dated activation date") {
+      Given("The endpoint is accessed")
+      val testOnlyUrl                = s"$host/lists/BC08?activeAt=9999-01-18T10:16:29.020Z"
+      val getCodelistByKeys_response = await(
+        get(
+          testOnlyUrl,
+          "Authorization" -> InternalAuthToken
+        )
+      )
+      getCodelistByKeys_response.status shouldBe 200
+      getCodelistByKeys_response.body[JsValue] shouldBe Json.parse("""[ {
+          |    "key": "BL",
+          |    "value": "Saint Barthélemy",
+          |    "properties": {
+          |      "actionIdentification": "823"
+          |    }
+          |  },
+          |  {
+          |    "key": "BM",
+          |    "value": "Bermuda",
+          |    "properties": {
+          |      "actionIdentification": "824"
+          |    }
+          |  },
+          |  {
+          |    "key": "CX",
+          |    "value": "Christmas Island",
+          |    "properties": {
+          |      "actionIdentification": "848"
+          |    }
+          |  },
+          |  {
+          |    "key": "CY",
+          |    "value": "Cyprus",
+          |    "properties": {
+          |      "actionIdentification": "849"
+          |    }
+          |  },
+          |  {
+          |    "key": "CZ",
+          |    "value": "Czechia",
+          |    "properties": {
+          |      "actionIdentification": "850"
+          |    }
+          |  },
+          |  {
+          |    "key": "QZ",
+          |    "value": "Disputed Western Territories",
+          |    "properties": {
+          |      "actionIdentification": "9999"
+          |    }
+          |  }
+               ]""".stripMargin)
+    }
+    //    In the above scenario Disputed Western Territory will appear as its activation date is in future 18-01-9999
 
     Scenario("To verify Delete Codelist request is successful") {
       Given("The endpoint is accessed")
