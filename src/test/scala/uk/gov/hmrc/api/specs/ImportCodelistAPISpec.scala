@@ -122,7 +122,7 @@ class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
     }
 
     Scenario("Verify fetching multiple codelist requests by Keys") {
-      Given("The endpoint is   accessed")
+      Given("The endpoint is accessed")
       val testOnlyUrl                = s"$host/lists/BC66?keys=B,W&keys=S"
       val getCodelistByKeys_response = await(
         get(
