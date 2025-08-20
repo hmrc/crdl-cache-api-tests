@@ -1,5 +1,3 @@
-**This is the template README. Please update this with project specific content.**
-
 # crdl-cache-api-tests
 
 CRDL-CACHE API tests.
