@@ -23,7 +23,7 @@ import play.api.libs.ws.DefaultBodyReadables.*
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import uk.gov.hmrc.api.client.HttpClient
 
-import java.time.{Instant, LocalDate, ZoneOffset, ZonedDateTime}
+import java.time.{Instant, ZoneOffset, ZonedDateTime}
 import java.time.format.DateTimeFormatter
 
 class ImportCodelistAPISpec extends BaseSpec, HttpClient, BeforeAndAfterAll:
